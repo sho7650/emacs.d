@@ -1,0 +1,15 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; [PKG´ÉÍý] ¥Ñ¥Ã¥±¡¼¥¸¼èÆÀÀèÄÉ²Ã
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+(package-initialize)
+;; font
+(create-fontset-from-ascii-font "Ricty-14:weight=normal:slant=normal" nil "ricty")
+(set-fontset-font "fontset-ricty"
+                  'unicode
+                  (font-spec :family "Ricty" :size 14)
+                  nil
+                  'append)
+(add-to-list 'default-frame-alist '(font . "fontset-ricty"))
