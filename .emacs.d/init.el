@@ -15,6 +15,8 @@
 
 ;; バックアップファイルを作らないようにする
 (setq make-backup-files nil)
+;;; 終了時にオートセーブファイルを消す
+(setq delete-auto-save-files t)
 ;;バッファにファイルをドラッグドロップしてファイルを開く
 (define-key global-map [ns-drag-file] 'ns-find-file)
 ;; マウス・スクロールを滑らかにする（Mac Emacs 専用）
@@ -63,3 +65,54 @@
 ;; edit-server の開始
 (require 'edit-server)
 (edit-server-start)
+
+;;
+;; uniquify : バッファの同一ファイル名を区別する
+;;
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+
+;; C-hでバックスペース
+(keyboard-translate ?\C-h ?\C-?)
+;; キーカスタマイズ
+(define-key global-map (kbd "M-?") 'help-for-help)        ; ヘルプ
+(define-key global-map (kbd "C-z") 'undo)                 ; undo
+(define-key global-map (kbd "C-c i") 'indent-region)      ; インデント
+(define-key global-map (kbd "C-c C-i") 'hippie-expand)    ; 補完
+(define-key global-map (kbd "C-c ;") 'comment-dwim)       ; コメントアウト
+(define-key global-map (kbd "C-[ M-C-g") 'goto-line)      ; 指定行へ移動
+
+;;; カーソルの点滅を止める
+(blink-cursor-mode 0)
+;;; 現在行を目立たせる
+(global-hl-line-mode)
+
+;; バッファの内容を自動保管 (秒)
+(require 'auto-save-buffers-enhanced)
+(setq auto-save-buffers-enhanced-interval 1) ; 指定のアイドル秒で保存
+(auto-save-buffers-enhanced t)
+
+;; バッファ自動再読込
+(global-auto-revert-mode 1)
+
+;; anything.el 開始
+(require 'anything-startup)
+
+;; 最近使ったファイルを表示
+(when (require 'recentf nil t)
+  (setq recentf-max-saved-items 2000)
+  (setq recentf-exclude '(".recentf"))
+  (setq recentf-auto-cleanup 10)
+  (setq recentf-auto-save-timer
+        (run-with-idle-timer 30 t 'recentf-save-list))
+  (recentf-mode 1)
+  (require 'recentf-ext))
+
+;; undohistの設定
+(when (require 'undohist nil t)
+  (undohist-initialize))
+
+;; undo-treeモードの設定
+(when (require 'undo-tree nil t)
+  (global-undo-tree-mode))
+
