@@ -28,6 +28,9 @@
 ;; 何文字目にいるか表示
 (column-number-mode 1)
 
+;; 実行コマンドにパスを通す (for GPG)
+(add-to-list 'exec-path "/usr/local/bin")
+
 ;; melpa/marmalade PACKAGE の追加
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
@@ -117,25 +120,14 @@
   (global-undo-tree-mode))
 
 ;; auto-complete を使う
-(require 'auto-complete)
-(global-auto-complete-mode t)
-(require 'auto-complete-config)
-(ac-config-default)
+;; (require 'auto-complete)
+;; (global-auto-complete-mode t)
+;; (require 'auto-complete-config)
+;; (ac-config-default)
 ;; C-n/C-pで候補選択
-(setq ac-use-menu-map t)
-(define-key ac-menu-map "\C-n" 'ac-next)
-(define-key ac-menu-map "\C-p" 'ac-previous)
-
-;; anything, Compile, Completion などは popup で表示し、window を崩さない
-(setq pop-up-windows nil)
-(require 'popwin nil t)
-(when (require 'popwin nil t)
-  (setq anything-samewindow nil)
-  (setq display-buffer-function 'popwin:display-buffer)
-  (push '("anything" :regexp t :height 0.5) popwin:special-display-config)
-  (push '("*Completions*" :height 0.4) popwin:special-display-config)
-  (push '("*compilation*" :height 0.4 :noselect t :stick t) popwin:special-display-config)
-  )
+;; (setq ac-use-menu-map t)
+;; (define-key ac-menu-map "\C-n" 'ac-next)
+;; (define-key ac-menu-map "\C-p" 'ac-previous)
 
 ;; Window 分割・移動を C-t で
 (defun other-window-or-split ()
@@ -145,5 +137,22 @@
   (other-window 1))
 (global-set-key (kbd "C-t") 'other-window-or-split)
 
-;; git
+;; git モードを利用する
 (require 'magit)
+
+;; twitter を使う
+(require 'twittering-mode)
+;; 起動時パスワード認証 *要 gpgコマンド
+(setq twittering-use-master-password t)
+;; パスワード暗号ファイル保存先変更 (デフォはホームディレクトリ)
+(setq twittering-private-info-file "~/.emacs.d/twittering-mode.gpg");; 表示フォーマットの変更
+;; 表示フォーマットの変更
+(setq twittering-status-format "%i %p%s (%S),  %@:\n%FILL[  ]{%T // from %f%L%r%R}\n ")
+;; アイコンを表示
+(setq twittering-icon-mode t)
+;; アイコンサイズ
+(setq twittering-convert-fix-size 48)
+;; 更新の頻度（秒）
+(setq twittering-timer-interval 300)
+;; ツイート取得数
+(setq twittering-number-of-tweets-on-retrieval 50)
