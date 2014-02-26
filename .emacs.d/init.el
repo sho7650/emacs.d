@@ -116,3 +116,34 @@
 (when (require 'undo-tree nil t)
   (global-undo-tree-mode))
 
+;; auto-complete を使う
+(require 'auto-complete)
+(global-auto-complete-mode t)
+(require 'auto-complete-config)
+(ac-config-default)
+;; C-n/C-pで候補選択
+(setq ac-use-menu-map t)
+(define-key ac-menu-map "\C-n" 'ac-next)
+(define-key ac-menu-map "\C-p" 'ac-previous)
+
+;; anything, Compile, Completion などは popup で表示し、window を崩さない
+(setq pop-up-windows nil)
+(require 'popwin nil t)
+(when (require 'popwin nil t)
+  (setq anything-samewindow nil)
+  (setq display-buffer-function 'popwin:display-buffer)
+  (push '("anything" :regexp t :height 0.5) popwin:special-display-config)
+  (push '("*Completions*" :height 0.4) popwin:special-display-config)
+  (push '("*compilation*" :height 0.4 :noselect t :stick t) popwin:special-display-config)
+  )
+
+;; Window 分割・移動を C-t で
+(defun other-window-or-split ()
+  (interactive)
+  (when (one-window-p)
+    (split-window-horizontally))
+  (other-window 1))
+(global-set-key (kbd "C-t") 'other-window-or-split)
+
+;; git
+(require 'magit)
