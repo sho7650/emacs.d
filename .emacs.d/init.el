@@ -145,14 +145,25 @@
 ;; 起動時パスワード認証 *要 gpgコマンド
 (setq twittering-use-master-password t)
 ;; パスワード暗号ファイル保存先変更 (デフォはホームディレクトリ)
-(setq twittering-private-info-file "~/.emacs.d/twittering-mode.gpg");; 表示フォーマットの変更
+(setq twittering-private-info-file "~/.emacs.d/twittering-mode.gpg")
 ;; 表示フォーマットの変更
 (setq twittering-status-format "%i %p%s (%S),  %@:\n%FILL[  ]{%T // from %f%L%r%R}\n ")
 ;; アイコンを表示
 (setq twittering-icon-mode t)
 ;; アイコンサイズ
-(setq twittering-convert-fix-size 48)
+(setq twittering-convert-fix-size 24)
 ;; 更新の頻度（秒）
 (setq twittering-timer-interval 300)
 ;; ツイート取得数
 (setq twittering-number-of-tweets-on-retrieval 50)
+;; 
+(setq twittering-initial-timeline-spec-string
+      '(":replies"
+	"sho7650/friends"
+	":mentions"
+	"sho7650/itinfra"
+	"sho7650/itarchitect"
+	"sho7650/designers"
+	"sho7650/いけ☆にえ"
+	":direct_messages"))
+
