@@ -13,6 +13,11 @@
    (lambda (buf) (set-buffer buf) (cd (expand-file-name "~"))) (buffer-list)))
 (add-hook 'after-init-hook 'cd-to-homedir-all-buffers)
 
+;; markdown モード
+(load "markdown-mode")
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . gfm-mode))
+
 ;; バックアップファイルを作らないようにする
 (setq make-backup-files nil)
 ;;; 終了時にオートセーブファイルを消す
@@ -147,7 +152,8 @@
 ;; パスワード暗号ファイル保存先変更 (デフォはホームディレクトリ)
 (setq twittering-private-info-file "~/.emacs.d/twittering-mode.gpg")
 ;; 表示フォーマットの変更
-(setq twittering-status-format "%i %p%s (%S),  %@:\n%FILL[  ]{%T // from %f%L%r%R}\n ")
+(setq twittering-status-format "%i %p%S(%s):%c [%f] \n%FILL[  ]{%T}\n ")
+;; (setq twittering-status-format "%i %p%s (%S),  %@:\n%FILL[  ]{%T // from %f%L%r%R}\n ")
 ;; アイコンを表示
 (setq twittering-icon-mode t)
 ;; アイコンサイズ
@@ -164,6 +170,5 @@
 	"sho7650/itinfra"
 	"sho7650/itarchitect"
 	"sho7650/designers"
-	"sho7650/いけ☆にえ"
 	":direct_messages"))
 
