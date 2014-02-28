@@ -204,4 +204,4 @@
 	":direct_messages"))
 
 ;; user/password 明記のある設定を外部呼び出し git管轄外
-(load (expand-file-name (concat (getenv "HOME") "/.emacs.d/extention")))
+;; (load (expand-file-name (concat (getenv "HOME") "/.emacs.d/extention")))
