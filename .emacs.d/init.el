@@ -13,6 +13,9 @@
    (lambda (buf) (set-buffer buf) (cd (expand-file-name "~"))) (buffer-list)))
 (add-hook 'after-init-hook 'cd-to-homedir-all-buffers)
 
+;; '¥' を入力したら '\' となるように
+(define-key global-map [?¥] [?\\])
+
 ;; markdown モード
 (load "markdown-mode")
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
@@ -32,6 +35,12 @@
 ; (setq default-frame-alist '((width . 100) (height . 35)))
 ;; 何文字目にいるか表示
 (column-number-mode 1)
+;; 最後の行に改行を入れておく
+(setq require-final-newline t)
+
+;; カーソルの場所を保存する
+(require 'saveplace)
+(setq-default save-place t)
 
 ;; 実行コマンドにパスを通す (for GPG)
 (add-to-list 'exec-path "/usr/local/bin")
@@ -52,7 +61,7 @@
 
 ;; 行番号の設定（F5 キーで表示・非表示を切り替え）
 (require 'linum)
-(global-linum-mode 0)
+(global-linum-mode t)
 (global-set-key [f5] 'linum-mode)
 (setq linum-format 
  (lambda (line) (propertize (format 
@@ -60,8 +69,8 @@
    (count-lines (point-min) (point-max))
   )))) (concat "%" (number-to-string w) "d "))
  line) 'face 'linum)))
-;(setq linum-format "%4d ")
-(setq linum-format "%d ")
+(setq linum-format "%4d ")
+; (setq linum-format "%d ")		
 
 ;; CommandとOptionを入れ替える
 (setq ns-command-modifier (quote meta))
@@ -105,6 +114,8 @@
 
 ;; anything.el 開始
 (require 'anything-startup)
+;; C-x C-o で anything-for-files 起動
+(global-set-key (kbd "C-x C-o") 'anything-for-files)
 
 ;; 最近使ったファイルを表示
 (when (require 'recentf nil t)
@@ -134,11 +145,31 @@
 ;; (define-key ac-menu-map "\C-n" 'ac-next)
 ;; (define-key ac-menu-map "\C-p" 'ac-previous)
 
+;; Window 分割を画面サイズに従って計算する
+(defun split-window-vertically-n (num_wins)
+  (interactive "p")
+  (if (= num_wins 2)
+      (split-window-vertically)
+    (progn
+      (split-window-vertically
+       (- (window-height) (/ (window-height) num_wins)))
+      (split-window-vertically-n (- num_wins 1)))))
+(defun split-window-horizontally-n (num_wins)
+  (interactive "p")
+  (if (= num_wins 2)
+      (split-window-horizontally)
+    (progn
+      (split-window-horizontally
+       (- (window-width) (/ (window-width) num_wins)))
+      (split-window-horizontally-n (- num_wins 1)))))
+
 ;; Window 分割・移動を C-t で
 (defun other-window-or-split ()
   (interactive)
   (when (one-window-p)
-    (split-window-horizontally))
+    (if (>= (window-body-width) 270)
+        (split-window-horizontally-n 3)
+      (split-window-horizontally)))
   (other-window 1))
 (global-set-key (kbd "C-t") 'other-window-or-split)
 
@@ -172,3 +203,5 @@
 	"sho7650/designers"
 	":direct_messages"))
 
+;; user/password 明記のある設定を外部呼び出し git管轄外
+(load (expand-file-name (concat (getenv "HOME") "/.emacs.d/extention")))
