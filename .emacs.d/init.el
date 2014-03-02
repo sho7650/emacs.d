@@ -17,9 +17,11 @@
 (define-key global-map [?¥] [?\\])
 
 ;; markdown モード
-(load "markdown-mode")
+(autoload 'markdown-mode "markdown-mode"
+  "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . gfm-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
 ;; バックアップファイルを作らないようにする
 (setq make-backup-files nil)
@@ -50,6 +52,7 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
+
 ;; Ricty フォントの利用
 (create-fontset-from-ascii-font "Ricty-14:weight=normal:slant=normal" nil "ricty")
 (set-fontset-font "fontset-ricty"
@@ -104,6 +107,25 @@
 ;;; 現在行を目立たせる
 (global-hl-line-mode)
 
+;; 
+;; .org を org-mode として読み込ませ、`agenda` を利用可能にする
+;; 
+(require 'org-install)
+(require 'org) ;; maybe this line is redundant
+(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+(setq org-agenda-files (list org-directory))
+(setq org-default-notes-file (expand-file-name "~/notes.org"))
+;; org-mode 向けショートカット
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cb" 'org-iswitchb)
+;; TODO状態
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "WAIT(w)" "|" "DONE(d)" "SOMEDAY(s)")))
+;; DONEの時刻を記録
+(setq org-log-done 'time)
+
 ;; バッファの内容を自動保管 (秒)
 (require 'auto-save-buffers-enhanced)
 (setq auto-save-buffers-enhanced-interval 1) ; 指定のアイドル秒で保存
@@ -115,7 +137,7 @@
 ;; anything.el 開始
 (require 'anything-startup)
 ;; C-x C-o で anything-for-files 起動
-(global-set-key (kbd "C-x C-o") 'anything-for-files)
+(global-set-key (kbd "C-l") 'anything-for-files)
 
 ;; 最近使ったファイルを表示
 (when (require 'recentf nil t)
@@ -178,7 +200,7 @@
 
 ;; twitter を使う
 (require 'twittering-mode)
-;; 起動時パスワード認証 *要 gpgコマンド
+;; 起動時パスワード認証 *要 gpgコマンド (brew install gpg)
 (setq twittering-use-master-password t)
 ;; パスワード暗号ファイル保存先変更 (デフォはホームディレクトリ)
 (setq twittering-private-info-file "~/.emacs.d/twittering-mode.gpg")
@@ -187,7 +209,7 @@
 ;; (setq twittering-status-format "%i %p%s (%S),  %@:\n%FILL[  ]{%T // from %f%L%r%R}\n ")
 ;; アイコンを表示
 (setq twittering-icon-mode t)
-;; アイコンサイズ
+;; アイコンサイズ *48以外は imagemagick が必要 (brew install imagemagick)
 (setq twittering-convert-fix-size 24)
 ;; 更新の頻度（秒）
 (setq twittering-timer-interval 300)
@@ -201,6 +223,7 @@
 	"sho7650/itinfra"
 	"sho7650/itarchitect"
 	"sho7650/designers"
+	":favorites"
 	":direct_messages"))
 
 ;; user/password 明記のある設定を外部呼び出し git管轄外

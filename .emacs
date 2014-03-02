@@ -8,6 +8,7 @@
  '(current-language-environment "UTF-8")
  '(custom-enabled-themes (quote (deeper-blue)))
  '(menu-bar-mode nil)
+ '(org-agenda-files nil)
  '(size-indication-mode t)
  '(tool-bar-mode nil))
 (custom-set-faces
