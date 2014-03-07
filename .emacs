@@ -6,7 +6,7 @@
  '(ansi-color-names-vector ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
  '(column-number-mode t)
  '(current-language-environment "UTF-8")
- '(custom-enabled-themes (quote (deeper-blue)))
+ '(custom-enabled-themes (quote (misterioso)))
  '(menu-bar-mode nil)
  '(org-agenda-files nil)
  '(size-indication-mode t)

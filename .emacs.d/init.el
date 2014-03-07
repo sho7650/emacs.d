@@ -1,3 +1,11 @@
+;; 半透明ウィンドウ
+(if window-system
+    (progn
+      (set-frame-parameter nil 'alpha 95)))
+
+;; スクリーンの最大化
+(set-frame-parameter nil 'fullscreen 'maximized)
+
 ;; 日本語の設定（UTF-8）
 (set-language-environment 'Japanese)
 (prefer-coding-system 'utf-8)
@@ -194,6 +202,15 @@
       (split-window-horizontally)))
   (other-window 1))
 (global-set-key (kbd "C-t") 'other-window-or-split)
+
+;; 終了時に起動していたバッファを、起動時に復元する
+(autoload 'save-current-configuration "revive" "Save status" t)
+(autoload 'resume "revive" "Resume Emacs" t)
+(autoload 'wipe "revive" "Wipe emacs" t)
+(define-key ctl-x-map "F" 'resume)                        ; C-x F で復元
+(define-key ctl-x-map "K" 'wipe)                          ; C-x K で Kill
+(add-hook 'kill-emacs-hook 'save-current-configuration)   ; 終了時に保存
+(resume) ; 起動時に復元
 
 ;; git モードを利用する
 (require 'magit)

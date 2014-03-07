@@ -1,7 +1,7 @@
 .emacs.d/extention.el
 .emacs.d/auto-save-list/
-.emacs.d/elisp/
-.emacs.d/elpa/
 .emacs.d/twittering-mode.gpg
 .emacs.d/undohist/
 .emacs.d/url/
+*.elc
+.emacs.desktop*
