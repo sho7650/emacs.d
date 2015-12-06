@@ -7,6 +7,10 @@
     (progn
       (set-frame-parameter nil 'alpha 95)))
 
+;; review-mode を利用する
+(require 'review-mode)
+(add-to-list 'auto-mode-alist '("\\.re\\'" . review-mode))
+
 ;; スクリーンの最大化
 (set-frame-parameter nil 'fullscreen 'maximized)
 
@@ -284,9 +288,5 @@ do nothing. And suppress the output from `message' and
 
 ;; user/password 明記のある設定を外部呼び出し git管轄外
 ;; (load (expand-file-name (concat (getenv "HOME") "/.emacs.d/extention")))
-
-;; review-mode を利用する
-(require 'review-mode)
-(add-to-list 'auto-mode-alist '("\\.re\\'" . review-mode))
 
 
