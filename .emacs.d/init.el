@@ -1,3 +1,7 @@
+;; Text Expandar をムリヤリ使う
+(define-key global-map [(super ?v)] 'scroll-down)
+(define-key global-map [(meta ?v)] 'yank)
+
 ;; 半透明ウィンドウ
 (if window-system
     (progn
@@ -157,6 +161,41 @@
   (recentf-mode 1)
   (require 'recentf-ext))
 
+;; 
+(require 'cl)
+ 
+(defvar my-recentf-list-prev nil)
+ 
+(defadvice recentf-save-list
+  (around no-message activate)
+  "If `recentf-list' and previous recentf-list are equal,
+do nothing. And suppress the output from `message' and
+`write-file' to minibuffer."
+  (unless (equal recentf-list my-recentf-list-prev)
+    (cl-flet ((message (format-string &rest args)
+		       (eval `(format ,format-string ,@args)))
+	      (write-file (file &optional confirm)
+			  (let ((str (buffer-string)))
+			    (with-temp-file file
+			      (insert str)))))
+      ad-do-it
+      (setq my-recentf-list-prev recentf-list))))
+
+(defadvice recentf-cleanup
+  (around no-message activate)
+  "suppress the output from `message' to minibuffer"
+  (cl-flet ((message (format-string &rest args)
+		     (eval `(format ,format-string ,@args))))
+    ad-do-it))
+
+(setq recentf-save-file (expand-file-name ".recentf" user-emacs-directory))
+(setq recentf-max-saved-items 2000)
+(setq recentf-exclude '(".recentf"))
+(setq recentf-auto-cleanup 10)
+(run-with-idle-timer 30 t 'recentf-save-list)
+(recentf-mode 1)
+
+
 ;; undohistの設定
 (when (require 'undohist nil t)
   (undohist-initialize))
@@ -216,32 +255,38 @@
 (require 'magit)
 
 ;; twitter を使う
-(require 'twittering-mode)
+;;(require 'twittering-mode)
 ;; 起動時パスワード認証 *要 gpgコマンド (brew install gpg)
-(setq twittering-use-master-password t)
+;;(setq twittering-use-master-password t)
 ;; パスワード暗号ファイル保存先変更 (デフォはホームディレクトリ)
-(setq twittering-private-info-file "~/.emacs.d/twittering-mode.gpg")
+;;(setq twittering-private-info-file "~/.emacs.d/twittering-mode.gpg")
 ;; 表示フォーマットの変更
-(setq twittering-status-format "%i %p%S(%s):%c [%f] \n%FILL[  ]{%T}\n ")
+;;(setq twittering-status-format "%i %p%S(%s):%c [%f] \n%FILL[  ]{%T}\n ")
 ;; (setq twittering-status-format "%i %p%s (%S),  %@:\n%FILL[  ]{%T // from %f%L%r%R}\n ")
 ;; アイコンを表示
-(setq twittering-icon-mode t)
+;;(setq twittering-icon-mode t)
 ;; アイコンサイズ *48以外は imagemagick が必要 (brew install imagemagick)
-(setq twittering-convert-fix-size 24)
+;;(setq twittering-convert-fix-size 24)
 ;; 更新の頻度（秒）
-(setq twittering-timer-interval 300)
+;;(setq twittering-timer-interval 300)
 ;; ツイート取得数
-(setq twittering-number-of-tweets-on-retrieval 50)
+;;(setq twittering-number-of-tweets-on-retrieval 50)
 ;; 
-(setq twittering-initial-timeline-spec-string
-      '(":replies"
-	"sho7650/friends"
-	":mentions"
-	"sho7650/itinfra"
-	"sho7650/itarchitect"
-	"sho7650/designers"
-	":favorites"
-	":direct_messages"))
+;;(setq twittering-initial-timeline-spec-string
+;;      '(":replies"
+;;	"sho7650/friends"
+;;	":mentions"
+;;	"sho7650/itinfra"
+;;	"sho7650/itarchitect"
+;;	"sho7650/designers"
+;;	":favorites"
+;;	":direct_messages"))
 
 ;; user/password 明記のある設定を外部呼び出し git管轄外
 ;; (load (expand-file-name (concat (getenv "HOME") "/.emacs.d/extention")))
+
+;; review-mode を利用する
+(require 'review-mode)
+(add-to-list 'auto-mode-alist '("\\.re\\'" . review-mode))
+
+
