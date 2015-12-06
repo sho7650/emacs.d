@@ -205,8 +205,8 @@ do nothing. And suppress the output from `message' and
   (undohist-initialize))
 
 ;; undo-treeモードの設定
-(when (require 'undo-tree nil t)
-  (global-undo-tree-mode))
+;;(when (require 'undo-tree nil t)
+;;  (global-undo-tree-mode))
 
 ;; auto-complete を使う
 ;; (require 'auto-complete)
