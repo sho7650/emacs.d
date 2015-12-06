@@ -1,3 +1,8 @@
+.emacs.d/.recentf
+.emacs.d/ac-comphist.dat
+.emacs.d/elisp/
+.emacs.d/elpa/
+.emacs.d/tumblr.el
 .emacs.d/extention.el
 .emacs.d/auto-save-list/
 .emacs.d/twittering-mode.gpg
