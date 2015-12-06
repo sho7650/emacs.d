@@ -7,10 +7,6 @@
     (progn
       (set-frame-parameter nil 'alpha 95)))
 
-;; review-mode を利用する
-(require 'review-mode)
-(add-to-list 'auto-mode-alist '("\\.re\\'" . review-mode))
-
 ;; スクリーンの最大化
 (set-frame-parameter nil 'fullscreen 'maximized)
 
@@ -68,6 +64,10 @@
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
+
+;; review-mode を利用する
+(require 'review-mode)
+(add-to-list 'auto-mode-alist '("\\.re\\'" . review-mode))
 
 ;; Ricty フォントの利用
 (create-fontset-from-ascii-font "Ricty-14:weight=normal:slant=normal" nil "ricty")
@@ -201,8 +201,8 @@ do nothing. And suppress the output from `message' and
 
 
 ;; undohistの設定
-(when (require 'undohist nil t)
-  (undohist-initialize))
+;;(when (require 'undohist nil t)
+;;  (undohist-initialize))
 
 ;; undo-treeモードの設定
 ;;(when (require 'undo-tree nil t)
